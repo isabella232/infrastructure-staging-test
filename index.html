@@ -3,30 +3,46 @@
   <title>Web Site Staging Service for Git Repositories</title>
   <style type="text/css">
   pre {
-     background: #FFC;
+     background: #DEF;
      border: 1px dotted #333;
      border-radius: 3px;
      padding: 2px;
   }
+  html {
+    background: #FFF;
+  }
   </style>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body style="font-family: sans-serif; width: 1000px; margin: 20px auto;">
-<h1>Web Site Staging Service for Git Repositories</h1>
+<body style="font-family: sans-serif; width: 980px; margin: 20px auto; padding: 8px;" class="card">
+<h1>Web Site Staging Service for Git Repositories:</h1>
 
 <p>The web site staging service is managed by <kbd>.asf.yaml</kbd> in git repositories.</p>
 
 <h2>Web site staging instructions:</h2>
 <p>To enable staging of web sites, an entry can be added to the site repository's .asf.yaml file:</p>
 <p>As an example, take the imaginary <kbd>yourproject-website.git</kbd> with an <kbd>.asf.yaml</kbd> file containing the following entry:</p>
-<pre>staging:<br/>    profile: foo</pre>
+<pre>staging<span style='color: #900;'>:</span><br/>    profile<span style='color: #900;'>:</span> <span style='color: #008;'>foo</span></pre>
 <p>this would stage the current branch at <a href="https://yourproject-foo.staged.apache.org">https://yourproject-foo.staged.apache.org</a> (meaning you can have multiple staging profiles and thus multiple branches staged for preview).<br/>
-One can also omit the profile and stage directly at <a href="https://yourproject.staged.apache.org">https://yourproject.staged.apache.org</a> as such:</p>
-<pre>staging: true</pre>
+One can also omit the profile and stage directly at <a href="https://yourproject.staged.apache.org">https://yourproject.staged.apache.org</a> as such (tilde means "no value" in YAML):</p>
+<pre>staging<span style='color: #900;'>:</span>
+  profile<span style='color: #900;'>:</span> <span style='color: #080;'>~</span></pre>
 <h3>Preventing branch-override on cloning branch:</h3>
-<p>One can set a protection on multitenancy, by specifying a whoami setting. If this does not match the current branch, no checkout/update will be made. Thus, one can have, on asf-site branch:</p>
-<pre>staging:<br/>  profile: test<br/>  whoami: asf-site</pre>
-<p>When cloning that branch to a new branch, let's call it asf-site-copy, the staging web site server will notice that `whoami` does not match asf-site-copy, and ignore that branch until such a point where the whoami is updated to match.</p>
+<p>One can set a protection on multitenancy, by specifying a <kbd>whoami</kbd> setting. If this does not match the current branch, no checkout/update will be made. Thus, one can have, on asf-site branch:</p>
+<pre>staging<span style='color: #900;'>:</span>
+  profile<span style='color: #900;'>:</span> <span style='color: #008;'>test</span>
+  whoami<span style='color: #900;'>:</span> <span style='color: #008;'>asf-site</span></pre>
+<p>When cloning that branch to a new branch, let's call it asf-site-copy, the staging web site server will notice that <kbd>whoami</kbd> does not match asf-site-copy, and ignore that branch until such a point where the <kbd>whoami</kbd> is updated to match.</p>
+<h3>CMS/pelican sub-directories for static output:</h3>
+<p>The staging site supports both the <kbd>content/</kbd> sub-dir as well as the pelican build <kbd>output/</kbd> sub-dir as the root directory for the web site. Thus, the web site root can either be:</p>
+<ul>
+<li> The root of the git branch, OR</li>
+<li> The <kbd>content/</kbd> directory in the root of the branch, OR</li>
+<li> The <kbd>output/</kbd> directory in the root of the branch</li>
+</ul>
 <hr/>
-<p>For questions, feedback or other inquiries, please contact users@infra.apache.org</p>
+<footer class="page-footer">
+  <div class="footer-copyright text-muted text-center">For questions, feedback or other inquiries, please contact users@infra.apache.org</div>
+</footer>
 </body>
 </html>
