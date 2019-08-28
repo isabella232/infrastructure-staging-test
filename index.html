@@ -1,3 +1,14 @@
 <h1>Infrastructure Web Site Staging Test</h1>
 
-<p>This staging service is managed by <kbd>.asy.yaml</kbd> in the infrastructure-staging-test.git repository.</p>
+<p>This staging service is managed by <kbd>.asf.yaml</kbd> in the <a href="https://github.com/apache/infrastructure-staging-test">infrastructure-staging-test.git</a> repository.</p>
+
+<h2>Web site staging instructions:</h2>
+<p>To enable staging of web sites, an entry can be added to the site repository's .asf.yaml file:</p>
+<p>As an example, take infrastructure-website.git:</p>
+<pre>staging:<br/>    profile: foo</pre>
+<p>this would stage the current branch at <a href="https://infrastructure-foo.staged.apache.org">https://infrastructure-foo.staged.apache.org</a> (meaning you can have multiple staging profiles and thus multiple branches staged for preview).<br/>One can also omit the profile and stage directly at <a href="https://infrastructure.staged.apache.org">https://infrastructure.staged.apache.org</a> as such:</p>
+<pre>staging: true</pre>
+<h3>Preventing branch-override on cloning branch:</h3>
+<p>One can set a protection on multitenancy, by specifying a whoami setting. If this does not match the current branch, no checkout/update will be made. Thus, one can have, on asf-site branch:</p>
+<pre>staging:<br/>  profile: test<br/>  whoami: asf-site</pre>
+<p>When cloning that branch to a new branch, let's call it asf-site-copy, the staging web site server will notice that `whoami` does not match asf-site-copy, and ignore that branch until such a point where the whoami is updated to match.</p>
