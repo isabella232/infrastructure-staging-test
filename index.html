@@ -1,9 +1,9 @@
 <html>
 <head>
-  <title>Web Site Staging Service for Git Repositories</title>
+  <title>Web Site Deployment Services for Git Repositories</title>
   <style type="text/css">
-  pre {
-     background: #DEF;
+  pre>code {
+     background: #DEF !important;
      border: 1px dotted #333;
      border-radius: 3px;
      padding: 2px;
@@ -11,38 +11,79 @@
   html {
     background: #FFF;
   }
+  .card {
+    background: #8881 !important;
+  }
+  kbd {
+    background: #3333 !important;
+    color: #333 !important;
+    padding: 2px !important;
+  }
   </style>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body style="font-family: sans-serif; width: 980px; margin: 20px auto; padding: 8px;" class="card">
 <h1>Web Site Staging Service for Git Repositories:</h1>
 
-<p>The web site staging service is managed by <kbd>.asf.yaml</kbd> in git repositories.</p>
+<p>The web site deployment service is managed through the <kbd>staging</kbd> and <kbd>publish</kbd> feature of the <kbd>.asf.yaml</kbd> file in git repositories.</p>
 
-<h2>Web site staging instructions:</h2>
-<p>To enable staging of web sites, an entry can be added to the site repository's .asf.yaml file:</p>
+<h2>Primer:</h2>
+<p>A basic staging and publishing profile to get you started could be:</p>
+<pre><code class="yaml"># Staging and publishing profile for yourproject-website.git:
+staging:
+  profile: ~
+  whoami: asf-staging
+
+publish:
+  whoami: asf-site
+</code></pre>
+<p>The above configuration, which we will explain in the paragraphs below, would enable a staging (live preview) web site at <kbd>yourproject.staged.apache.org</kbd> using the <kbd>asf-staging</kbd> branch of your repository, as well as deploy the <kbd>asf-site</kbd> branch of the repository to your main web site at <kbd>yourproject.apache.org</kbd>.</p>
+
+<h2>Staging a web site preview domain:</h2>
+<p>To enable staging (live preview) of web sites, a <kbd>staging</kbd> entry can be added to the site repository's <kbd>.asf.yaml</kbd> file:</p>
 <p>As an example, take the imaginary <kbd>yourproject-website.git</kbd> with an <kbd>.asf.yaml</kbd> file containing the following entry:</p>
-<pre>staging<span style='color: #900;'>:</span><br/>    profile<span style='color: #900;'>:</span> <span style='color: #008;'>foo</span></pre>
-<p>this would stage the current branch at <a href="https://yourproject-foo.staged.apache.org">https://yourproject-foo.staged.apache.org</a> (meaning you can have multiple staging profiles and thus multiple branches staged for preview).<br/>
-One can also omit the profile and stage directly at <a href="https://yourproject.staged.apache.org">https://yourproject.staged.apache.org</a> as such (tilde means "no value" in YAML):</p>
-<pre>staging<span style='color: #900;'>:</span>
-  profile<span style='color: #900;'>:</span> <span style='color: #080;'>~</span></pre>
+<pre><code class="yaml">staging:
+  profile: beta
+</code></pre>
+<p>This would stage the current branch at <a href="https://yourproject-beta.staged.apache.org">https://yourproject-beta.staged.apache.org</a> (meaning you can have multiple staging profiles and thus multiple branches staged for preview).<br/>
+One can also omit the profile value, and stage directly at <a href="https://yourproject.staged.apache.org">https://yourproject.staged.apache.org</a> as such (tilde means "no value" in YAML):</p>
+<pre><code class="yaml">staging:
+  profile: ~
+</code></pre>
 <h3>Preventing branch-override on cloning branch:</h3>
-<p>One can set a protection on multitenancy, by specifying a <kbd>whoami</kbd> setting. If this does not match the current branch, no checkout/update will be made. Thus, one can have, on asf-site branch:</p>
-<pre>staging<span style='color: #900;'>:</span>
-  profile<span style='color: #900;'>:</span> <span style='color: #008;'>test</span>
-  whoami<span style='color: #900;'>:</span> <span style='color: #008;'>asf-site</span></pre>
-<p>When cloning that branch to a new branch, let's call it asf-site-copy, the staging web site server will notice that <kbd>whoami</kbd> does not match asf-site-copy, and ignore that branch until such a point where the <kbd>whoami</kbd> is updated to match.</p>
+<p>One can set a protection on multitenancy, by specifying a <kbd>whoami</kbd> setting. If this does not match the current branch, no checkout/update will be made. Thus, one can have, on asf-staging branch:</p>
+<pre><code class="yaml">staging:
+  profile: beta
+  whoami:  asf-staging
+</code></pre>
+<p>When cloning that branch to a new branch, let's call it <kbd>asf-staging-copy</kbd>, the staging web site server will notice that <kbd>whoami</kbd> does not match <kbd>asf-staging-copy</kbd>, and ignore that branch until such a point where the <kbd>whoami</kbd> is updated to match.</p>
+
+<h3>Publishing a branch to your project web site:</h3>
+<p><i>Note: if you have previously used gitwcsub for web site publishing, your first publish action using .asf.yaml may be ignored. This is because gitwcsub will only stop once it realizes you are using the new .asf.yaml feature. Any subsequent pushes to your repository should correctly deploy via the new mechanism.</i></p>
+<p>To publish a branch to your project web site sub-domain (yourproject.apache.org), create a <kbd>publish</kbd> in your .asf.yaml file. You should also enable branch-protection through the <kbd>whoami</kbd> parameter:</kbd></p>
+<pre><code class="yaml">publish:
+  whoami: asf-site
+</code></pre>
 <h3>CMS/pelican sub-directories for static output:</h3>
-<p>The staging site supports both the <kbd>content/</kbd> sub-dir as well as the pelican build <kbd>output/</kbd> sub-dir as the root directory for the web site. Thus, the web site root can either be:</p>
+<p>The staging and deployment servers supports both the <kbd>content/</kbd> sub-dir as well as the pelican build <kbd>output/</kbd> sub-dir as the root directory for the web site. Thus, the web site root can either be:</p>
 <ul>
 <li> The root of the git branch, OR</li>
-<li> The <kbd>content/</kbd> directory in the root of the branch, OR</li>
-<li> The <kbd>output/</kbd> directory in the root of the branch</li>
+<li> The <kbd>content/</kbd> directory at the root of the branch, OR</li>
+<li> The <kbd>output/</kbd> directory at the root of the branch</li>
 </ul>
 <hr/>
 <footer class="page-footer">
   <div class="footer-copyright text-muted text-center">For questions, feedback or other inquiries, please contact users@infra.apache.org</div>
 </footer>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('pre code').forEach((block) => {
+    hljs.highlightBlock(block);
+  });
+});
+</script>
 </body>
 </html>
