@@ -10,6 +10,7 @@
   }
   html {
     background: #FFF;
+    font-size: 0.90rem;
   }
   .card {
     background: #8881 !important;
@@ -23,7 +24,7 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body style="font-family: sans-serif; width: 980px; margin: 20px auto; padding: 8px;" class="card">
-<h1>Web Site Staging Service for Git Repositories:</h1>
+<h1>Web Site Deployment Service for Git Repositories:</h1>
 
 <p>The web site deployment service is managed through the <kbd>staging</kbd> and <kbd>publish</kbd> feature of the <kbd>.asf.yaml</kbd> file in git repositories.</p>
 
@@ -35,7 +36,7 @@ staging:
   whoami:  asf-staging
 
 publish:
-  whoami: asf-site
+  whoami:  asf-site
 </code></pre>
 <p>The above configuration, which we will explain in the paragraphs below, would enable a staging (live preview) web site at <kbd>yourproject.staged.apache.org</kbd> using the <kbd>asf-staging</kbd> branch of your repository, as well as deploy the <kbd>asf-site</kbd> branch of the repository to your main web site at <kbd>yourproject.apache.org</kbd>.</p>
 
