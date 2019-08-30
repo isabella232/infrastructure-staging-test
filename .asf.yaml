@@ -3,3 +3,5 @@ staging:
   profile: test  # This will publish at https://infrastructure-test.staged.apache.org. Omit profile for infrastructure.staged.a.o
   whoami: master # branch protection. If whoami does not match current branch, payload is ignored. 
 
+publish:
+  whoami: asf-site
