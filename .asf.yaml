@@ -5,3 +5,10 @@ staging:
 
 publish:
   whoami: asf-site
+
+github:
+  description: "Testing .asf.yaml and such"
+  labels:
+    - gnomes
+    - ponies
+
