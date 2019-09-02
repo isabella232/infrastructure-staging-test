@@ -8,8 +8,9 @@ publish:
   whoami: asf-site
 
 github:
-  description: "Testing .asf.yaml and such"
+  description: "Test repository for the .asf.yaml features"
   labels:
-    - gnomes
-    - ponies
-    - elephants
+    - infrastructure
+    - apache
+    - development
+    - github
