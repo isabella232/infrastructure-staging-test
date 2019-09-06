@@ -13,5 +13,6 @@ github:
     - infrastructure
     - apache
     - development
-    - githubInvalid...
+    - githubInvalidTag
+
   homepage: https://selfserve.apache.org/
